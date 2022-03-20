@@ -1,0 +1,267 @@
+---
+title: "The Well-Being of Canadians Regarding Their Living Conditions"
+subtitle: "Income and Region Focuses"
+author: 
+  - Fan Yang, Xiangyu Wang
+thanks: "Code and data are available at:https://github.com/GuLanTe1/The-well-being-of-Canadians-regarding-their-living-conditions."
+date: "`r format(Sys.time(), '%d %B %Y')`"
+abstract: "Self-rated health and self-rated mental health are two crucial sociological research indicators. This paper uses the data from the family part of the Canadian General Social Survey to analyze these two indicators. When family income is higher than $75,000 before tax and the personal income is higher than $50,000, people are more likely to have a more positive attitude on both evaluations. And people living in the Quebec region are most optimistic about self-health and mental health. At the same time, education level and religious affiliation do not affect the two evaluations much. Therefore, we recommend that the government provide better health insurance for families earning less than $75,000 and individuals earning less than $50,000 and exempt them from the cost of seeing a psychiatrist."
+output: 
+  pdf_document:
+    latex_engine: xelatex
+toc: FALSE
+bibliography: reference.bib
+---
+
+```{r,echo=FALSE,include=FALSE}
+library(ggplot2)
+library(kableExtra)
+data=read.csv("AAW0YPIP.csv")
+```
+
+# Introduction
+
+The General Social Survey (GSS) on the Family is an annual survey conducted by Statistic Canada. It aims to collect statistical information on the living conditions and well-being of people living in Canada to support policymakers with policy decisions. As junior statisticians at Statistic Canada, we hope to find and discover the relationship between Canadians' evaluation of their health and living conditions. Moreover, we hope to offer valuable suggestions for policymakers to adopt and improve upon current policies based on our findings.
+
+The original GSS was collected through a telephone interview with the target population which was defined as "non-institutionalized persons 15 years of age and older" (General Social Survey 2017). As a supplement to this survey collection method in this study, a ten-question survey was created and distributed by emailed URL link and QR scan code to the target population. In addition, we expected to collect the living conditions and well-being of people living in Canada to improve the diversity of collection methods and support people who feel more comfortable being interviewed by this method. 
+
+By improving survey collection methods and performing histogram visualization analysis on collected data, we observed that over 80 percent of respondents were optimistic about feelings about their life as a whole with their rating 7 or above, and most of the respondents correspondingly think their self-rated physical and mental health are in at least, good standing. And we found that respondents' feelings about life as a whole, combined with self-rated health and self-rated mental health, had a positive correlation with respondents' personal income and family income. This finding potentially tells us how to advise policymakers to develop accurate policies that value, support, and advance people's physical and mental health across the country.
+
+\newpage
+
+# Data
+
+This paper uses rstudio(@citeR) to analyze. We use package ggplot2(@citeggplot2) to make the graphs and package kableExtra(@citekableExtra) to make the tables.
+
+## Survey Methology
+
+The General Social Survey (GSS) data in this study were accessed from Statistics Canada under the Data Liberation Initiative (DLI) terms. We aim to collect data from five regions represented by ten provinces. To randomize the survey distributions and target populations, we divided these regions and provinces into strata as geographic areas. The sampling frame was separated by the lists of telephone numbers in use and the list of all dwellings within the ten provinces. The original sample size was set to 20000 as we received 20602 responses as a result. 
+
+The target population was defined as “non-institutionalized persons 15 years of age and older” by the User Guide of General Social Survey 2017. And we reached them by lists of email addresses in use that are currently available to Statistics Canada from cooperative institutions, including Census of population and telephone service providers. 
+
+Individuals who received the survey email can easily access the survey by clicking the URL link or scanning the QR code and finishing the survey online supported by multiple platforms. Responses collected will be automatically recorded into the Statistics Canada GSS database and be ready for staff to access at any time. Questions that are non-responded will be automatically filled with the string value “Not stated” to avoid confusion and the missing value issue of this dataset. Furthermore, to avoid multiple attempts of the survey, each email address is limited to response only once to the survey questions. But all data safety and personal privacy is strictly protracted and stored under the protection and supervision of the Statistics Act.
+
+## Variables of Interest
+
+1.Self-rated health: This is the respondent’s assessment of self health. It is divided into excellent,  very good, good, fair, poor.
+
+2.Self-rated mental health: This is the respondent’s assessment of self mental health. It is divided into excellent,  very good, good, fair, poor.
+
+3.Family income - Total (before tax): This is the total family income before tax. It is divided into  less than $25,000, $25,000 to $49,999, $50,000 to $74,999, $75,000 to $99,999, $100,000 to $ 124,999, and $125,000 and more.
+
+4.Income of respondent - Total (before tax)：This is the respondent’s income before tax. It is divided into  less than $25,000, $25,000 to $49,999, $50,000 to $74,999, $75,000 to $99,999, $100,000 to $ 124,999, and $125,000 and more.
+
+5.Feelings about life as a whole：This is the respondent’s feeling about life. It is divided into 11 levels, from 0 which is very dissatisfied to 10 which is very satisfied.
+
+6.Region: Region is the region the respondent lives in. It includes the Atlantic Ocean, Quebec, British Columbia, Ontario and Prairie region.
+
+7.Religflg: This is the respondent’s religious affiliation flag. It includes religious affiliation and no religious affiliation.
+
+\newpage
+
+# Result
+
+```{r Fig1, fig.cap="Age of Respondent when Completed Studies",echo=FALSE }
+# Plot 2nd graph, content as above chunk setting  indicates
+age=as.data.frame(table(data$acompstc))
+names(age)=c("Age","Counts")
+age=age[0:26,]
+ggplot(data=age,mapping=aes(x=Age,y=Counts,fill=Age))+geom_col()+theme_classic()+ scale_x_discrete(breaks=c("15","16","17","18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"),
+        labels=c("15 and Under","16","17","18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40 and Older"))+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+ scale_fill_discrete(name = "Age", labels = c("15 and Under","16","17","18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40 and Older"))+ 
+  theme(legend.position = "none")
+```
+
+```{r Fig2, fig.cap="Region of residence of the respondent",echo=FALSE}
+# Plot 3rd graph, content as above chunk setting  indicates
+region=as.data.frame(table(data$region))
+names(region)=c("Region","Counts")
+ggplot(data=region,mapping=aes(x=Region,y=Counts,fill=Region))+geom_col()+ scale_x_discrete(breaks=c("1","2","3","4","5"),
+        labels=c("Atlantic Region", "Quebec","Ontario","Prairie region","British Columbia"))+theme_classic()+ scale_fill_discrete(name = "Region", labels = c("Atlantic Region", "Quebec","Ontario","Prairie region","British Columbia"))+ 
+  theme(legend.position = "none")
+```
+
+```{r Fig3, fig.cap=" Income of respondent - Total (before tax)",echo=FALSE}
+# Plot 7th graph, content as above chunk setting  indicates
+tt=as.data.frame(table(data$ttlincg2))
+names(tt)=c("Income","Counts")
+ggplot(data=tt,mapping = aes(x=Income,y=Counts,fill=Income))+geom_col()+ scale_x_discrete(breaks=c("1","2","3","4","5","6"),
+        labels=c(" Less than $25,000", "$25,000 to $49,999","$50,000 to $74,999","$75,000 to $99,999","$100,000 to $ 124,999","$125,000 and more"))+ scale_fill_discrete(name = " Income of Respondent", labels = c(" Less than $25,000", "$25,000 to $49,999","$50,000 to $74,999","$75,000 to $99,999","$100,000 to $ 124,999","$125,000 and more"))+ 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=.5))+ theme(legend.position = "none")+
+  labs( title = "Personal income distribution of respondents")
+```
+
+
+Some essential takeaways from primary sampling data are that many of the respondents are relatively young, as the 39 years and under population in Fig1 shows a right-skewed trend towards young age responses. In addition, Fig2 demonstrates the number of respondents from different regions was roughly about the same despite the number of respondents from Ontario being about 20% higher than that of other regions. The number of British Columbia respondents was 20% lower than those from the other three regions besides Ontario. Following by Fig3, the personal income distribution showed an expected right-skewed trend with about 30 percent of respondents reporting their after tax income is below $25,000 per year.
+
+
+This study mainly focuses on implications and factors that influenced respondents' self-rated health, self-rated mental health, and feelings about life. The distribution of respondents' feelings about life as a whole Fig4 shows a left-skewed pattern if we ignore the unrelated rating answers such as "Don't know," "Refusal," and "Not stated." Nevertheless, it demonstrated that most Canadian respondents generally feel they are at least somewhat satisfied with their current life as a whole. And we can also observe the same positive outcome on respondents' feelings about self rated health and mental health, with more than 80 percent of respondents answering at least "good" or above to these two questions.
+
+```{r Fig4, fig.cap="Overall Satisfaction",echo=FALSE}
+# Plot 5th graph, content as above chunk setting  indicates
+slm=as.data.frame(table(data$slm_01))
+names(slm)=c("Satisfaction","Counts")
+slm=slm[0:10,]
+ggplot(data=slm,mapping=aes(x=Satisfaction,y=Counts,fill=Satisfaction))+geom_col()+scale_x_discrete(breaks=c("0","1","2","3","4","5","6","7","8","9"),
+        labels=c("0","1","2","3","4","5","6","7","8","9"))+theme_classic()+ scale_fill_discrete(name = "Satisfaction", labels = c("0","1","2","3","4,","5","6","7","8","9"))+ 
+  theme(legend.position = "none")
+```
+
+We produced cross-related histograms of religious affiliation flags, education, and self-rating. We observed no clear evidence for a direct relationship between self-rating and religiosity and education. Therefore, we made multiple tables for more intuitive data analysis and comparison to explore the related influencing factors. 
+
+```{r Fig5, fig.cap="Self Rated Health of Different Religious Affliliation Flag",echo=FALSE}
+#Plot the self rated health based on different religious affiliation flag
+re=as.data.frame(table(data$srh_110,data$religflg))
+names(re)=c("Health","Religion","Counts")
+re=re[c(1:5,9:13),]
+ggplot(data=re,mapping = aes(x=Health,y=Counts,fill=Religion))+geom_col(position = "stack")+
+  scale_x_discrete(breaks=c("1","2","3","4","5"),
+        labels=c("Excellent","Very Good","Good","Fair","Poor"))+
+  scale_fill_discrete(name = "Religious Affliliation Flag", labels = c("Has religious affiliation", "No religious affiliation"))
+```
+
+```{r Fig6, fig.cap="Self Rated Mental Health of Different Religious Affliliation Flag",echo=FALSE}
+#Plot the self rated mental health based on different religious affiliation flag
+re=as.data.frame(table(data$srh_115,data$religflg))
+names(re)=c("Health","Religion","Counts")
+re=re[c(1:5,9:13),]
+ggplot(data=re,mapping = aes(x=Health,y=Counts,fill=Religion))+geom_col(position = "stack")+
+  scale_x_discrete(breaks=c("1","2","3","4","5"),
+        labels=c("Excellent","Very Good","Good","Fair","Poor"))+
+  scale_fill_discrete(name = "Religious Affliliation Flag", labels = c("Has religious affiliation", "No religious affiliation"))+xlab("Mental Health")
+```
+
+```{r Fig7, fig.cap="Self Rated Health of Different Education Level",echo=FALSE}
+#Plot the self rated health based on education level
+edu=as.data.frame(table(data$srh_110,data$ehg3_01b))
+names(edu)=c("Health","Education","Counts")
+edu=edu[c(1:5,9:13,17:21,25:29,33:37,41:45,49:53),]
+ggplot(data=edu,mapping=aes(x=Health,y=Counts,fill=Education))+geom_col(position="stack")+
+  scale_x_discrete(breaks=c("1","2","3","4","5"),
+        labels=c("Excellent","Very Good","Good","Fair","Poor"))+
+  scale_fill_discrete(name = "Education", labels = c("Less than high school", "High school or equivalent","Trade diploma"," College","Diploma below bachelor's level","Bachelor's degree ","Above the Bachelor's degree "))
+```
+
+```{r Fig8, fig.cap="Self Rated Mental Health of Different Education Level",echo=FALSE}
+#Plot the self rated mental health based on education level
+edu=as.data.frame(table(data$srh_115,data$ehg3_01b))
+names(edu)=c("Health","Education","Counts")
+edu=edu[c(1:5,9:13,17:21,25:29,33:37,41:45,49:53),]
+ggplot(data=edu,mapping=aes(x=Health,y=Counts,fill=Education))+geom_col(position="stack")+
+  scale_x_discrete(breaks=c("1","2","3","4","5"),
+        labels=c("Excellent","Very Good","Good","Fair","Poor"))+
+  scale_fill_discrete(name = "Education", labels = c("Less than high school", "High school or equivalent","Trade diploma"," College","Diploma below bachelor's level","Bachelor's degree ","Above the Bachelor's degree "))+xlab("Mental Health")
+```
+
+
+```{r,echo=FALSE}
+#Table of the self-rated health of different family income group
+d1=table(data$famincg2,data$srh_110)
+d2=d1[,1:5]
+colnames(d2)=c("Excellent","Very Good","Good","Fair","Poor")
+rownames(d2)=c(" Less than $25,000", "$25,000 to $49,999","$50,000 to $74,999","$75,000 to $99,999","$100,000 to $ 124,999","$125,000 and more")
+d3=round(prop.table(d2[,1:5], margin = 1) * 100,3)
+d3 %>%
+  kbl(caption = " Percentage of Self-Rated Health of Different Family Income Group") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r,echo=FALSE}
+#Table of the self-rated mental health of different family income group
+d1=table(data$famincg2,data$srh_115)
+d2=d1[,1:5]
+colnames(d2)=c("Excellent","Very Good","Good","Fair","Poor")
+rownames(d2)=c(" Less than $25,000", "$25,000 to $49,999","$50,000 to $74,999","$75,000 to $99,999","$100,000 to $ 124,999","$125,000 and more")
+d3=round(prop.table(d2[,1:5], margin = 1) * 100,3)
+d3 %>%
+  kbl(caption = "Percentage of Self-Rated Mental Health of Different Family Income Group") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r,echo=FALSE}
+#Table of the self-rated health of different Respondent income group
+d1=table(data$ttlincg2,data$srh_110)
+d2=d1[,1:5]
+colnames(d2)=c("Excellent","Very Good","Good","Fair","Poor")
+rownames(d2)=c(" Less than $25,000", "$25,000 to $49,999","$50,000 to $74,999","$75,000 to $99,999","$100,000 to $ 124,999","$125,000 and more")
+d3=round(prop.table(d2[,1:5], margin = 1) * 100,3)
+d3 %>%
+  kbl(caption = "Percentage of Self-Rated Health of Different Respondent Income Group") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+Table 1 to 3 shows the percentage of different families' self-rated health/mental health, and personal income provides a specific feature of the factors influencing this score. With higher personal and overall household income reported, more respondents would rate their physical and mental health a higher score. Families and individuals in the $125,000 and more income group in Table 1 and Table 3 rated their health as "Excellent" more than twice as many as those in the Less than $25,000 income group. Relatively low-income groups and individuals are far more likely to score low on self-health scores than high-income groups, with a trend that the lower the income, the far greater the chance of rating a lower score to their health/mental health.
+
+
+We also found that regional differences are also one of the reasons for the different self-rated scores. For example, 35.545 percent of Quebec respondents rated their mental health as 'Excellent,' ranking first in the regions, with a nearly 5 percent difference from Ontario, which came in second at 30.982 percent. We also saw the same trend in physical health scores, with Quebec firmly in first place with a 25 percent 'excellent' response ranking area. The Atlantic Region's physics and mental self-rated scores are the lowest among the five regions, suggesting that policy formulation in this region should focus on finding the reasons for the low score and improving people's living standards.
+
+```{r,echo=FALSE}
+region=table(data$srh_115,data$region)
+region=region[1:5,]
+rownames(region)=c("Excellent","Very Good","Good","Fair","Poor")
+colnames(region)=c("Atlantic Region", "Quebec","Ontario","Prairie region","British Columbia")
+d3=round(prop.table(region[,1:5], margin = 2) * 100,3)
+d3 %>%
+  kbl(caption = "Percentage of Province of Different Respondent Income Group") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r,echo=FALSE}
+region=table(data$srh_110,data$region)
+region=region[1:5,]
+rownames(region)=c("Excellent","Very Good","Good","Fair","Poor")
+colnames(region)=c("Atlantic Region", "Quebec","Ontario","Prairie region","British Columbia")
+d3=round(prop.table(region[,1:5], margin = 2) * 100,3)
+d3 %>%
+  kbl(caption = "Percentage of Province of Different Respondent Income Group") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+```
+ 
+\newpage
+
+# Discussion
+
+## Total household income before tax, respondents' personal income before tax, and the region where the respondents lived all affect respondents' self-rated health. Generally, The higher the household and individual income, the more optimistic the respondents' self-rated health and mental health.  
+For families with an income less than $25,000, more than 10% of respondents view their health as poor, and more than 4% view their mental health as inferior. As family income increases, those who consider health and mental health poor see a significant decrease. We find that 7.128% of people with income less than $25,000 view their health as poor, and 2.612% view their mental health as inferior. However, unlike family income, more people evaluate their health and mental health as poor for the personal income range from $100,000 to $124,999. At the same time, the overall trend is still decreasing. Typically, we find that for households with a total income of $75,000 or more and personal income of over $50,000 before tax, more than 90% of respondents rated their health and mental health as good or above.
+
+
+## People in more developed regions tend to have a more optimistic view of their health.
+Quebec people are undoubtedly the most optimistic about their health and mental health. Over 24% of Quebec people view their health as excellent, the highest among all regions. The result remains the same for mental health. And more than 35% of people in Quebec give perfect to their mental health. The second and third highest percentage goes to Ontario and British Columbia.
+Moreover, Quebec has the lowest percentage of the population self-rating as fair or poor in two indicators, followed by Ontario and British Columbia. These three regions are more economically and educationally developed compared with other regions. Therefore, we conclude that people in developed areas have more positive views on their health and mental health.
+
+ 
+ 
+## Weakness and Further Improvements
+First, the data collected by the survey has too many missing values. For example, we want to study how to work type and how employment type affects people’s views on health and mental health. But the two variables containing 18852 marking as valid skip. Less than 10% of the collected data is available in these two variables. This will lead to inaccurate results of our analysis. Therefore, to improve the accuracy, we suggest that the survey be offered to specific groups of people.
+Moreover, we only focus on descriptive analysis in this paper. Some of the relationships between data can be observed from the graphs and tables. But we cannot know how self-rated health and mental health are affected when several variables are combined. To improve the paper's accuracy and depth, we can further build models on the two indicators.
+
+
+\newpage
+
+# Appendix
+
+https://docs.google.com/forms/d/1o0nI-4MvsDxPUNznMCqe_FV-ON1YVkrvebdIp-ZIqUQ/edit?ts=62366ce4
+
+![The QR Code of Survey Questions](701813080545271932.jpg)
+
+![](1.png)
+
+![](2.png)
+
+![](3.png)
+
+
+
+\newpage
+
+# Reference
+
+General Social Survey. Statistics Canada , 1 Apr. 2020, https://sda-artsci-utoronto-ca.myaccess.library.utoronto.ca/sdaweb/dli2/gss/gss31/gss31/more_doc/GSS31_User_Guide.pdf.
+
+
+Government of Canada, Statistics Canada. “General Social Survey – Family (GSS).” Government of Canada, Statistics Canada, 8 Dec. 2021, https://www.statcan.gc.ca/en/survey/household/4501#ssq1. 
+
+
+
+
+
